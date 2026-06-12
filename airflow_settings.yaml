@@ -1,0 +1,41 @@
+airflow:
+  connections:
+    # ── Postgres lab (datos del curso) ──────────────────────────────────────
+    - conn_id: postgres_lab
+      conn_type: postgres
+      conn_host: postgres-lab       # nombre del servicio Docker (red interna)
+      conn_schema: pipeline_db
+      conn_login: curso
+      conn_password: curso123
+      conn_port: 5432               # puerto INTERNO del contenedor (no el 5433 del host)
+
+    # ── MLflow (tracking de experimentos) ───────────────────────────────────
+    - conn_id: mlflow_default
+      conn_type: http
+      conn_host: mlflow
+      conn_port: 5001
+
+    # ── API pública de ejemplo para S3-S4 (Open-Meteo, sin API key) ─────────
+    - conn_id: open_meteo_api
+      conn_type: http
+      conn_host: api.open-meteo.com
+      conn_schema: https
+
+  variables:
+    # ── Rutas internas (disponibles en todos los DAGs con Variable.get) ──────
+    - variable_name: DATA_PATH
+      variable_value: /usr/local/airflow/include/data
+
+    - variable_name: MODELS_PATH
+      variable_value: /usr/local/airflow/include/models
+
+    - variable_name: OUTPUTS_PATH
+      variable_value: /usr/local/airflow/include/outputs
+
+    - variable_name: MLFLOW_TRACKING_URI
+      variable_value: http://mlflow:5001
+
+  pools:
+    - pool_name: default_pool
+      pool_slot: 5
+      pool_description: Pool por defecto del curso

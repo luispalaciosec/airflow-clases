@@ -1,0 +1,35 @@
+# Keys y secretos — NUNCA subir
+.env
+*.key
+secrets/
+
+# Airflow
+logs/
+airflow.db
+airflow-webserver.pid
+standalone_admin_password.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+dist/
+build/
+
+# MLflow artifacts (pesados)
+include/models/*.pkl
+mlruns/
+
+# Outputs generados
+include/outputs/*.csv
+include/outputs/*.json
+include/outputs/*.html
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+.DS_Store
+Thumbs.db

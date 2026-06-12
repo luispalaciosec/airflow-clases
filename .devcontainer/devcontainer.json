@@ -1,0 +1,36 @@
+{
+  "name": "Curso Airflow + IA",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "ms-azuretools.vscode-docker",
+        "redhat.vscode-yaml",
+        "ms-toolsai.jupyter"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "editor.formatOnSave": true,
+        "editor.rulers": [88]
+      }
+    }
+  },
+  "postCreateCommand": "pip install astro-cli-installer 2>/dev/null; curl -sSL install.astronomer.io | sudo bash -s && astro dev start --no-browser",
+  "forwardPorts": [8080, 5050, 5433],
+  "portsAttributes": {
+    "8080": { "label": "Airflow UI", "onAutoForward": "openBrowser" },
+    "5050": { "label": "pgAdmin", "onAutoForward": "notify" },
+    "5433": { "label": "Postgres Lab", "onAutoForward": "silent" }
+  },
+  "remoteUser": "vscode"
+}

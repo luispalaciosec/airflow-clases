@@ -1,0 +1,13 @@
+fecha,producto,categoria,cantidad,precio_unitario,vendedor
+2024-01-15,Laptop Dell,Tecnología,2,1200.00,Ana García
+2024-01-15,Monitor LG 27,Tecnología,3,350.00,Carlos López
+2024-01-16,Teclado Mecánico,Periféricos,8,75.00,Ana García
+2024-01-16,Mouse Logitech,Periféricos,12,35.00,María Rodríguez
+2024-01-17,Laptop HP,Tecnología,1,950.00,Carlos López
+2024-01-17,Auriculares Sony,Audio,5,120.00,Ana García
+2024-01-18,Webcam Logitech,Periféricos,6,89.00,María Rodríguez
+2024-01-18,SSD Samsung 1TB,Almacenamiento,10,110.00,Carlos López
+2024-01-19,Laptop Lenovo,Tecnología,3,1100.00,Ana García
+2024-01-19,Hub USB,Periféricos,15,25.00,María Rodríguez
+2024-01-20,Monitor Dell 24,Tecnología,4,280.00,Carlos López
+2024-01-20,Mousepad XL,Accesorios,20,18.00,Ana García

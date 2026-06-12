@@ -1,0 +1,62 @@
+version: '3'
+
+# Este archivo agrega servicios EXTRA al stack de Airflow que levanta Astro CLI.
+# Postgres-meta (puerto 5432) ya corre internamente — NO modificar.
+# Postgres-lab es NUESTRO contenedor de datos para los labs del curso.
+
+services:
+
+  # ─── Base de datos para los labs ETL ────────────────────────────────────────
+  postgres-lab:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: curso
+      POSTGRES_PASSWORD: curso123
+      POSTGRES_DB: pipeline_db
+    ports:
+      - "5433:5432"           # 5432 ya está ocupado por Airflow internamente
+    volumes:
+      - postgres-lab-data:/var/lib/postgresql/data
+      - ./include/sql:/docker-entrypoint-initdb.d   # scripts SQL se corren al crear la DB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U curso -d pipeline_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── pgAdmin: UI visual para explorar las tablas ────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@curso.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"       # modo desktop, sin login extra
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres-lab:
+        condition: service_healthy
+
+  # ─── MLflow tracking server (S5-S6) ─────────────────────────────────────────
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.15.1
+    restart: unless-stopped
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5001
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+    ports:
+      - "5001:5001"
+    volumes:
+      - mlflow-data:/mlflow
+
+volumes:
+  postgres-lab-data:
+  pgadmin-data:
+  mlflow-data:
