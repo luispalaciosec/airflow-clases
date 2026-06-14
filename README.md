@@ -165,3 +165,33 @@ astro dev restart --no-cache
 - [TaskFlow API tutorial](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/taskflow.html)
 - [OpenAI API docs](https://platform.openai.com/docs)
 - [MLflow docs](https://mlflow.org/docs/latest/index.html)
+
+---
+
+## ⚠️ Problema frecuente — "No se puede acceder a este sitio"
+
+### Causa
+Cuando Airflow genera links internos (al hacer Trigger DAG, ver logs, etc.) usa `localhost` en lugar de la URL del Codespace. Ese link **no funciona** en el browser.
+
+### Solución rápida
+Si ves una URL como:
+```
+http://localhost:11827/dags/...
+```
+
+Cámbiala manualmente a:
+```
+https://[nombre-codespace]-11827.app.github.dev/dags/...
+```
+
+### URL base de cada servicio (este Codespace)
+
+Abrir siempre desde la pestaña **Puertos** en VS Code, o usar estos formatos:
+
+| Servicio | URL formato |
+|----------|------------|
+| **Airflow UI** | `https://[codespace]-[puerto].app.github.dev/home` |
+| **MLflow** | `https://[codespace]-5001.app.github.dev` |
+| **pgAdmin** | `https://[codespace]-5050.app.github.dev` |
+
+> 💡 El nombre del Codespace y el puerto de Airflow cambian cada vez que se reinicia. Siempre usa la pestaña **Puertos** en VS Code como punto de partida — haz click en el ícono 🌐 del puerto que necesitas.

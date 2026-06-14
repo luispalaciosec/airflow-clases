@@ -16,6 +16,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.models import Variable
 from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
+from datetime import timedelta
 import requests
 import pandas as pd
 import logging
@@ -36,8 +37,6 @@ DIAS_HISTORICO = 7
     schedule="@daily",
     start_date=days_ago(1),
     catchup=False,
-    retries=2,
-    retry_delay=timedelta(minutes=2),
     tags=["sesion-4", "modulo-2", "etl", "postgres", "api"],
 )
 def etl_clima_postgres():
