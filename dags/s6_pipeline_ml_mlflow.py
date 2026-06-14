@@ -87,8 +87,22 @@ def pipeline_ml_mlflow():
         import joblib
 
         mlflow_uri = Variable.get("MLFLOW_TRACKING_URI", default_var="http://mlflow:5001")
-        mlflow.set_tracking_uri(mlflow_uri)
-        mlflow.set_experiment("curso-airflow-ml")
+        local_artifact_path = "/tmp/mlflow_artifacts"
+        os.makedirs(local_artifact_path, exist_ok=True)
+       
+        mlflow.set_tracking_uri(mlflow_uri) 
+
+        # Estructura correcta para crear el experimento con ruta alterna si no existe
+        nombre_experimento = "curso-airflow-ml-v5"
+        exp = mlflow.get_experiment_by_name(nombre_experimento)
+        
+        if exp is None:
+            mlflow.create_experiment(
+                name=nombre_experimento,
+                artifact_location="/tmp/mlruns_artifacts"
+            )
+        
+        mlflow.set_experiment(nombre_experimento)
 
         X_train = np.array(splits["X_train"])
         X_test = np.array(splits["X_test"])
@@ -96,6 +110,7 @@ def pipeline_ml_mlflow():
         y_test = splits["y_test"]
 
         hiperparametros = {"n_estimators": 100, "max_depth": 5, "random_state": 42}
+        
 
         with mlflow.start_run() as run:
             # Entrenar

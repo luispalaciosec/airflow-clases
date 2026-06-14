@@ -51,18 +51,27 @@ def pipeline_llm_resumen():
             ORDER BY fecha DESC
             LIMIT 7;
         """)
+        
         if not registros:
             log.warning("⚠️  No hay datos en clima_historico — ejecuta s4_etl_clima_postgres primero")
-            # Datos de ejemplo para que el lab funcione sin datos reales
             registros = [
                 ("2024-01-20", "Guayaquil", 32.1, 24.5, 28.3, 0.0),
                 ("2024-01-19", "Guayaquil", 31.8, 23.9, 27.9, 2.3),
                 ("2024-01-18", "Guayaquil", 33.0, 25.1, 29.1, 0.0),
             ]
+            
         log.info("📊 Datos extraídos: %d registros", len(registros))
+        
+        # Casteamos los valores numéricos a float para evitar el error de Decimal
         return json.dumps([
-            {"fecha": str(r[0]), "ciudad": r[1], "temp_max": r[2],
-             "temp_min": r[3], "temp_promedio": r[4], "precipitacion": r[5]}
+            {
+                "fecha": str(r[0]), 
+                "ciudad": r[1], 
+                "temp_max": float(r[2]) if r[2] is not None else 0.0, 
+                "temp_min": float(r[3]) if r[3] is not None else 0.0, 
+                "temp_promedio": float(r[4]) if r[4] is not None else 0.0, 
+                "precipitacion": float(r[5]) if r[5] is not None else 0.0
+            }
             for r in registros
         ])
 
